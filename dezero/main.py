@@ -1,9 +1,8 @@
-from testcases import backward_flow_1, backward_flow_2
+from testcases import incircular_reference
 
 
 def main():
-    backward_flow_1()
-    backward_flow_2()
+    incircular_reference()
 
 
 if __name__ == '__main__':

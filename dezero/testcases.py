@@ -42,3 +42,12 @@ def backward_flow_2():
     y.backward()
     print(y.data)
     print(x.grad)
+
+
+def incircular_reference():
+    for i in range(10):
+        print('Round', i)
+        x = Variable(np.random.randn(10000))
+        y = square(square(square(x)))
+        y.backward()
+        print(x.grad, end='\n\n')

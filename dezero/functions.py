@@ -1,3 +1,4 @@
+import weakref
 from numbers import Number
 
 import numpy as np
@@ -19,7 +20,7 @@ class Function:
             output.set_creator(self)
 
         self.inputs = inputs
-        self.outputs = outputs
+        self.outputs = [weakref.ref(output) for output in outputs]
         return outputs if len(outputs) > 1 else outputs[0]
     
     def __eq__(self, other):

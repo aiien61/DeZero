@@ -30,10 +30,10 @@ class Variable:
         
         creators_list = priority_set([self.creator])
         while creators_list:
-            print("creators_list:", creators_list)
+            # print("creators_list:", creators_list)
             creator = creators_list.pop()
-            print("take creator:", creator)
-            gys = [output.grad for output in creator.outputs]
+            # print("take creator:", creator)
+            gys = [output().grad for output in creator.outputs]  # use weakref
             gxs = creator.backward(*gys)
             if not isinstance(gxs, tuple):
                 gxs = (gxs,)
@@ -46,8 +46,8 @@ class Variable:
 
                 if x.creator is not None:
                     creators_list.add(PriorityItem(x.creator))
-                    print("collect creator:", x.creator)
-            print("updated creators_list:", creators_list, end="\n\n")
+                    # print("collect creator:", x.creator)
+            # print("updated creators_list:", creators_list, end="\n\n")
         return None
 
     def cleargrad(self) -> NoReturn:
