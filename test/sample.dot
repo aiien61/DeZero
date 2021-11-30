@@ -1,0 +1,15 @@
+digraph g {
+140001419547936 [label="y", color=orange, style=filled]
+140001924414816 [label="Mul", color=lightblue, style=filled, shape=box]
+140001924414960 -> 140001924414816
+140001924415344 -> 140001924414816
+140001924414816 -> 140001419547936
+140001924414960 [label="", color=orange, style=filled]
+140001924415344 [label="x2", color=orange, style=filled]
+140001924414528 [label="Add", color=lightblue, style=filled, shape=box]
+140001924357712 -> 140001924414528
+140001924415440 -> 140001924414528
+140001924414528 -> 140001924414960
+140001924357712 [label="x0", color=orange, style=filled]
+140001924415440 [label="x1", color=orange, style=filled]
+}
