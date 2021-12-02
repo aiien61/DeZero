@@ -2,7 +2,7 @@ import numpy as np
 
 from dezero import Variable, Config, using_config
 from dezero.core_simple import add, mul
-# from dezero.functions import square, exp, cube
+from dezero.functions import exp
 
 
 def repeated_variable():

@@ -2,7 +2,7 @@ from numbers import Number
 
 import numpy as np
 
-from core_simple import Function
+from dezero.core_simple import Function
 
 
 class Square(Function):
@@ -16,6 +16,10 @@ class Square(Function):
         return gx
 
 
+def square(x: Number) -> Number:
+    return Square()(x)
+
+
 class Cube(Function):
     def forward(self, x: Number) -> Number:
         y = x ** 3
@@ -27,6 +31,10 @@ class Cube(Function):
         return gx
 
 
+def cube(x: Number) -> Number:
+    return Cube()(x)
+
+
 class Exp(Function):
     def forward(self, x: Number) -> Number:
         y = np.exp(x)
@@ -36,14 +44,6 @@ class Exp(Function):
         x = self.inputs[0].data
         gx = np.exp(x) * gy
         return gx
-
-
-def square(x: Number) -> Number:
-    return Square()(x)
-
-
-def cube(x: Number) -> Number:
-    return Cube()(x)
 
 
 def exp(x: Number) -> Number:

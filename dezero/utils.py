@@ -1,5 +1,6 @@
 import os
 import subprocess
+from collections.abc import Iterable
 
 
 def _dot_var(v, verbose=False):
@@ -25,27 +26,38 @@ def _dot_func(f):
 
 
 def get_dot_graph(output, verbose=True):
+    from .core_simple import PriorityItem, PrioritySet
+
     txt = ''
     function_list = []
-    seen_set = set()
+    # seen_set = set()
     
-    def add_function(f):
-        if f not in seen_set:
-            function_list.append(f)
-            # funcs.sort(key=lambda x: x.generation)
-            seen_set.add(f)
+    # def add_function(f):
+    #     if f not in seen_set:
+    #         function_list.append(f)
+    #         # funcs.sort(key=lambda x: x.generation)
+    #         seen_set.add(f)
 
-    add_function(output.creator)
+    def priority_set(iterable_queue: Iterable):
+        return PrioritySet()(iterable_queue)
+
+    function_list = priority_set([output.creator])
+
+    # add_function(output.creator)
     txt += _dot_var(output, verbose)
+    print(txt)
 
     while function_list:
+        print(function_list)
         function = function_list.pop()
+        print(function)
         txt += _dot_func(function)
         for x in function.inputs:
             txt += _dot_var(x, verbose)
 
             if x.creator is not None:
-                add_function(x.creator)
+                # add_function(x.creator)
+                function_list.add(PriorityItem(x.creator))
     return 'digraph g{\n' + txt + '}'
 
 

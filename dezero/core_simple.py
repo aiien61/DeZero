@@ -192,6 +192,11 @@ class Add(Function):
         return gy, gy
 
 
+def add(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Add()(x0, x1)
+
+
 class Mul(Function):
     def forward(self, x0: Number, x1: Number) -> Number:
         y = x0 * x1
@@ -202,12 +207,21 @@ class Mul(Function):
         return gy * x1, gy * x0
 
 
+def mul(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Mul()(x0, x1)
+
+
 class Neg(Function):
     def forward(self, x):
         return -x
 
     def backward(self, gy):
         return -gy
+
+
+def neg(x: Number) -> Number:
+    return Neg()(x)
 
 
 class Sub(Function):
@@ -217,6 +231,16 @@ class Sub(Function):
 
     def backward(self, gy):
         return gy, -gy
+
+
+def sub(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Sub()(x0, x1)
+
+
+def rsub(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Sub()(x1, x0)
 
 
 class Div(Function):
@@ -229,6 +253,16 @@ class Div(Function):
         gx0 = gy / x1
         gx1 = gy * (-x0 / (x1 ** 2))
         return gx0, gx1
+
+
+def div(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Div()(x0, x1)
+
+
+def rdiv(x0: Number, x1: Number) -> Number:
+    x1 = as_array(x1)
+    return Div()(x1, x0)
 
 
 class Pow(Function):
@@ -246,40 +280,6 @@ class Pow(Function):
         return gx
 
 
-def add(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Add()(x0, x1)
-
-
-def mul(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Mul()(x0, x1)
-
-
-def neg(x: Number) -> Number:
-    return Neg()(x)
-
-
-def sub(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Sub()(x0, x1)
-
-
-def rsub(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Sub()(x1, x0)
-
-
-def div(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Div()(x0, x1)
-
-
-def rdiv(x0: Number, x1: Number) -> Number:
-    x1 = as_array(x1)
-    return Div()(x1, x0)
-
-
 def power(x: Number, c: int) -> Number:
     return Pow(c)(x)
 
@@ -290,13 +290,13 @@ def as_array(x) -> np.ndarray:
     return x
 
 
-def as_variable(obj):
+def as_variable(obj) -> Variable:
     if isinstance(obj, Variable):
         return obj
     return Variable(obj)
 
 
-def setup_variable():
+def setup_variable() -> NoReturn:
     Variable.__mul__ = mul
     Variable.__rmul__ = mul
     Variable.__add__ = add
@@ -307,6 +307,7 @@ def setup_variable():
     Variable.__truediv__ = div
     Variable.__rtruediv__ = rdiv
     Variable.__pow__ = power
+    return None
 
 
 @contextlib.contextmanager
@@ -321,5 +322,3 @@ def using_config(name, value):
 
 def no_grad():
     return using_config("enable_backprop", False)
-
-
