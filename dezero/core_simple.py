@@ -265,7 +265,7 @@ def rdiv(x0: Number, x1: Number) -> Number:
     return Div()(x1, x0)
 
 
-class Pow(Function):
+class Power(Function):
     def __init__(self, c):
         self.c = c
 
@@ -281,7 +281,7 @@ class Pow(Function):
 
 
 def power(x: Number, c: int) -> Number:
-    return Pow(c)(x)
+    return Power(c)(x)
 
 
 def as_array(x) -> np.ndarray:

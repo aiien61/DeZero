@@ -1,9 +1,8 @@
 import numpy as np
 
-from dezero import Variable, Config, using_config
+from dezero import Variable, using_config
 from dezero.core_simple import add, mul
-from dezero.functions import exp
-
+from dezero.functions import exp, square, cube
 
 def repeated_variable():
     print("First Trial, Equation: Y = 2X")
