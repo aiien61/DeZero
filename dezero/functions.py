@@ -2,16 +2,15 @@ from numbers import Number
 
 import numpy as np
 
-from dezero.core_simple import Function
+from dezero.core import Function
 
 
 class Square(Function):
     def forward(self, x: Number) -> Number:
-        y = x ** 2
-        return y
+        return  x ** 2
 
     def backward(self, gy: Number) -> Number:
-        x = self.inputs[0].data
+        x, *_ = self.inputs
         gx = 2 * x * gy
         return gx
 
@@ -22,11 +21,10 @@ def square(x: Number) -> Number:
 
 class Cube(Function):
     def forward(self, x: Number) -> Number:
-        y = x ** 3
-        return y
+        return x ** 3
 
     def backward(self, gy: Number) -> Number:
-        x = self.inputs[0].data
+        x, *_ = self.inputs
         gx = 3 * (x ** 2) * gy
         return gx
 
@@ -37,14 +35,39 @@ def cube(x: Number) -> Number:
 
 class Exp(Function):
     def forward(self, x: Number) -> Number:
-        y = np.exp(x)
-        return y
+        return np.exp(x)
 
     def backward(self, gy: Number) -> Number:
-        x = self.inputs[0].data
+        x, *_ = self.inputs
         gx = np.exp(x) * gy
         return gx
 
 
 def exp(x: Number) -> Number:
     return Exp()(x)
+
+
+class Sin(Function):
+    def forward(self, x):
+        return np.sin(x)
+
+    def backward(self, gy):
+        x, *_ = self.inputs
+        return cos(x) * gy
+
+
+def sin(x):
+    return Sin()(x)
+
+
+class Cos(Function):
+    def forward(self, x):
+        return np.cos(x)
+
+    def backward(self, gy):
+        x, *_ = self.inputs
+        return -sin(x) * gy
+
+
+def cos(x):
+    return Cos()(x)
