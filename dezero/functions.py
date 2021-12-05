@@ -71,3 +71,17 @@ class Cos(Function):
 
 def cos(x):
     return Cos()(x)
+
+
+class Tanh(Function):
+    def forward(self, x):
+        return np.tanh(x)
+
+    def backward(self, gy):
+        y, *_ = self.outputs
+        y = y()  # y is weakref
+        return (1 - y ** 2) * gy
+
+
+def tanh(x):
+    return Tanh()(x)

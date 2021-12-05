@@ -21,15 +21,15 @@ def _dot_func(f):
     for x in f.inputs:
         txt += dot_edge.format(id(x), id(f))
     for y in f.outputs:
-        txt += dot_edge.format(id(f), id(y()))    
-    return 
+        txt += dot_edge.format(id(f), id(y()))
+    return txt
 
 
 def get_dot_graph(output, verbose=True):
-    from .core_simple import PriorityItem, PrioritySet
+    from .core import PriorityItem, PrioritySet
 
     txt = ''
-    function_list = []
+    # function_list = []
     # seen_set = set()
     
     # def add_function(f):
@@ -45,12 +45,9 @@ def get_dot_graph(output, verbose=True):
 
     # add_function(output.creator)
     txt += _dot_var(output, verbose)
-    print(txt)
 
     while function_list:
-        print(function_list)
         function = function_list.pop()
-        print(function)
         txt += _dot_func(function)
         for x in function.inputs:
             txt += _dot_var(x, verbose)
