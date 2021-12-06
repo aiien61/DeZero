@@ -9,6 +9,8 @@ from collections.abc import Iterable
 import numpy as np
 from typing import NoReturn
 
+import dezero
+
 
 class Config:
     enable_backprop = True
@@ -150,6 +152,11 @@ class Variable:
     def cleargrad(self) -> NoReturn:
         self.grad = None
         return None
+
+    def reshape(self, *shape):
+        if len(shape) == 1 and isinstance(shape[0], (tuple, list)):
+            shape = shape[0]
+        return dezero.functions.reshape(self, shape)
 
 
 class Function:

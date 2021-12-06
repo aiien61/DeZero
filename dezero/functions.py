@@ -104,3 +104,16 @@ def reshape(x, shape):
     if x.shape == shape:
         return as_variable(x)
     return Reshape(shape)(x)
+
+
+class Transpose(Function):
+    def forward(self, x):
+        return np.transpose(x)
+
+    def backward(self, gy):
+        gx = transpose(gy)
+        return gx
+
+
+def transpose(x):
+    return Transpose()(x)
