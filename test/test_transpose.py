@@ -12,3 +12,10 @@ y = F.transpose(x)
 print(y)
 y.backward()
 print(x.grad)
+
+x = Variable(np.random.rand(2, 3))
+print(x)
+y = x.transpose()
+print(y)
+y = x.T
+print(y)
