@@ -117,3 +117,17 @@ class Transpose(Function):
 
 def transpose(x):
     return Transpose()(x)
+
+
+class Sum(Function):
+    def forward(self, x):
+        self.x_shape = x.shape
+        return x.sum()
+
+    def backward(self, gy):
+        gx = broadcast_to(gy, self.x_shape)
+        return gx
+
+
+def sum(x):
+    return Sum()(x)
