@@ -18,6 +18,7 @@ y = F.sum(x, axis=0)
 y.backward()
 print(y)
 print(x.grad)
+print(x.shape, "->", y.shape)
 
 x = Variable(np.random.randn(2, 3, 4, 5))
 y = x.sum(keepdims=True)
