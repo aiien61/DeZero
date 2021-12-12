@@ -22,3 +22,11 @@ print(y)
 
 y.backward()
 print(x1.grad)  # should be variable([3])
+
+x0.cleargrad()
+x1.cleargrad()
+
+z = x0 * x1
+print(z)
+z.backward()
+print(x1.grad)

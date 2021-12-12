@@ -229,13 +229,12 @@ class Mul(Function):
         return x0 * x1
 
     def backward(self, gy) -> tuple:
-        gx0, gx1 = gy, gy
+        x0, x1 = self.inputs
+        gx0, gx1 = gy * x0, gy * x1
         if self.x0_shape != self.x1_shape:
             gx0 = dezero.functions.sum_to(gx0, self.x0_shape)
             gx1 = dezero.functions.sum_to(gx1, self.x1_shape)
-        
-        x0, x1 = self.inputs
-        return gx0 * x1, gx1 * x0
+        return gx0, gx1
 
 
 def mul(x0, x1):
@@ -287,7 +286,7 @@ class Div(Function):
         x0, x1 = self.inputs
         gx0 = gy / x1
         gx1 = gy * (-x0 / (x1 ** 2))
-        
+
         if self.x0_shape != self.x1_shape:
             gx0 = dezero.functions.sum_to(gx0, self.x0_shape)
             gx1 = dezero.functions.sum_to(gx1, self.x1_shape)
