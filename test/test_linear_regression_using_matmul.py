@@ -18,17 +18,12 @@ b = Variable(np.zeros(1))
 def predict(x):
     return F.matmul(x, W) + b
 
-
-def mean_squeared_error(x0, x1):
-    diff = x0 - x1
-    return F.sum(diff ** 2)/len(diff)
-
 lr = .1
 iters = 100
 
 for _ in range(iters):
     y_pred = predict(x)
-    loss = mean_squeared_error(y,y_pred)
+    loss = F.mean_squared_error(y, y_pred)
     
     W.cleargrad()
     b.cleargrad()
