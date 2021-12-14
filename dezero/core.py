@@ -171,11 +171,15 @@ class Variable:
 
 class Function:
     def __call__(self, *inputs):
+        print('inputs:', inputs)
         inputs = [as_variable(x) for x in inputs]
         xs = [x.data for x in inputs]
         ys = self.forward(*xs)
+        print('ys type:', type(ys))
         if not isinstance(ys, tuple):
             ys = (ys,)
+        for y in ys:
+            print('y:', y, type(y))
         outputs = [Variable(as_array(y)) for y in ys]
 
         if Config.enable_backprop:
@@ -186,6 +190,8 @@ class Function:
             self.inputs = inputs
             self.outputs = [weakref.ref(output) for output in outputs]
 
+        print('outputs:', outputs)
+        print()
         return outputs if len(outputs) > 1 else outputs[0]
 
     def __eq__(self, other):
@@ -219,6 +225,7 @@ class Add(Function):
 
 
 def add(x0, x1):
+    print('do add')
     x1 = as_array(x1)
     return Add()(x0, x1)
 
@@ -238,6 +245,7 @@ class Mul(Function):
 
 
 def mul(x0, x1):
+    print('do mul')
     x1 = as_array(x1)
     return Mul()(x0, x1)
 
@@ -251,6 +259,7 @@ class Neg(Function):
 
 
 def neg(x):
+    print('do neg')
     return Neg()(x)
 
 
@@ -268,11 +277,13 @@ class Sub(Function):
 
 
 def sub(x0, x1):
+    print('do sub')
     x1 = as_array(x1)
     return Sub()(x0, x1)
 
 
 def rsub(x0, x1):
+    print('do rsub')
     x1 = as_array(x1)
     return Sub()(x1, x0)
 
@@ -294,11 +305,13 @@ class Div(Function):
 
 
 def div(x0, x1):
+    print('do div')
     x1 = as_array(x1)
     return Div()(x0, x1)
 
 
 def rdiv(x0, x1):
+    print('do rdiv')
     x1 = as_array(x1)
     return Div()(x1, x0)
 
@@ -319,16 +332,24 @@ class Power(Function):
 
 
 def power(x, c: int):
+    print('do power')
     return Power(c)(x)
 
 
 def as_array(x) -> np.ndarray:
+    print('do as_array')
     if np.isscalar(x):
+        print('x is scalar')
         return np.array(x)
+    
+    if isinstance(x, Variable):
+        print('x is not scalar, x is', x)
+        return as_array(x.data)
     return x
 
 
 def as_variable(obj) -> Variable:
+    print('do as_variable')
     if isinstance(obj, Variable):
         return obj
     return Variable(obj)

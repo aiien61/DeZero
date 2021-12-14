@@ -46,6 +46,7 @@ class Exp(Function):
 
 
 def exp(x: Number) -> Number:
+    print('do exp')
     return Exp()(x)
 
 
@@ -102,6 +103,7 @@ class Reshape(Function):
 
 
 def reshape(x, shape):
+    print('do reshape')
     if x.shape == shape:
         return as_variable(x)
     return Reshape(shape)(x)
@@ -117,6 +119,7 @@ class Transpose(Function):
 
 
 def transpose(x):
+    print('do transpose')
     return Transpose()(x)
 
 
@@ -137,6 +140,7 @@ class Sum(Function):
 
 
 def sum(x, axis=None, keepdims=False):
+    print('do sum')
     return Sum(axis, keepdims)(x)
 
 
@@ -154,6 +158,7 @@ class BroadcastTo(Function):
 
 
 def broadcast_to(x, shape):
+    print('do broadcast_to')
     if x.shape == shape:
         return as_variable(x)
     return BroadcastTo(shape)(x)
@@ -173,6 +178,7 @@ class SumTo(Function):
 
 
 def sum_to(x, shape):
+    print('do sum_to')
     if x.shape == shape:
         return as_variable(x)
     return SumTo(shape)(x)
@@ -190,6 +196,7 @@ class MatMul(Function):
 
 
 def matmul(x, W):
+    print('do matmul')
     return MatMul()(x, W)
 
 
@@ -215,6 +222,7 @@ def mean_squared_error_simple(x0, x1):
     diff = x0 - x1
     return F.sum(diff ** 2)/len(diff)
 
+
 class Linear(Function):
     def forward(self, x, W, b):
         y = x.dot(W)
@@ -231,6 +239,7 @@ class Linear(Function):
 
 
 def linear(x, W, b=None):
+    print('do linear')
     return Linear()(x, W, b)
 
 
@@ -245,7 +254,9 @@ def linear_simple(x, W, b=None):
 
 class Sigmoid(Function):
     def forward(self, x):
-        return 1 / (1 + exp(-x))
+        print('do sigmoid forward')
+        y = 1 / (1 + exp(-x))
+        return y
 
     def backward(self, gy):
         y, *_ = self.inputs
@@ -254,6 +265,7 @@ class Sigmoid(Function):
 
 
 def sigmoid(x):
+    print('do sigmoid')
     return Sigmoid()(x)
 
 
