@@ -121,18 +121,14 @@ class Variable:
 
         creators_list = priority_set([self.creator])
         while creators_list:
-            # print("creators_list:", creators_list)
             creator = creators_list.pop()  # pop up the closest level 
-            # print("take creator:", creator)
             gys = [output().grad for output in creator.outputs]  # use weakref
-            # print('gys:', gys)
             with using_config("enable_backprop", create_graph):
                 gxs = creator.backward(*gys)
                 if not isinstance(gxs, tuple):
                     gxs = (gxs,)
                 
                 for x, gx in zip(creator.inputs, gxs):
-                    # print('x:', x, ', gx:', gx)
                     if x.grad is None:
                         x.grad = gx
                     else:
@@ -140,9 +136,7 @@ class Variable:
                     
                     if x.creator is not None:
                         creators_list.add(PriorityItem(x.creator))
-                        # print("collect creator:", x.creator)
-            
-            # print("updated creators_list:", creators_list, end="\n\n")
+
             if not retain_grad:
                 for y in creator.outputs:
                     y().grad = None
@@ -171,15 +165,11 @@ class Variable:
 
 class Function:
     def __call__(self, *inputs):
-        print('inputs:', inputs)
         inputs = [as_variable(x) for x in inputs]
         xs = [x.data for x in inputs]
         ys = self.forward(*xs)
-        print('ys type:', type(ys))
         if not isinstance(ys, tuple):
             ys = (ys,)
-        for y in ys:
-            print('y:', y, type(y))
         outputs = [Variable(as_array(y)) for y in ys]
 
         if Config.enable_backprop:
@@ -190,8 +180,6 @@ class Function:
             self.inputs = inputs
             self.outputs = [weakref.ref(output) for output in outputs]
 
-        print('outputs:', outputs)
-        print()
         return outputs if len(outputs) > 1 else outputs[0]
 
     def __eq__(self, other):
@@ -225,7 +213,6 @@ class Add(Function):
 
 
 def add(x0, x1):
-    print('do add')
     x1 = as_array(x1)
     return Add()(x0, x1)
 
@@ -245,7 +232,6 @@ class Mul(Function):
 
 
 def mul(x0, x1):
-    print('do mul')
     x1 = as_array(x1)
     return Mul()(x0, x1)
 
@@ -259,7 +245,6 @@ class Neg(Function):
 
 
 def neg(x):
-    print('do neg')
     return Neg()(x)
 
 
@@ -277,13 +262,11 @@ class Sub(Function):
 
 
 def sub(x0, x1):
-    print('do sub')
     x1 = as_array(x1)
     return Sub()(x0, x1)
 
 
 def rsub(x0, x1):
-    print('do rsub')
     x1 = as_array(x1)
     return Sub()(x1, x0)
 
@@ -305,13 +288,11 @@ class Div(Function):
 
 
 def div(x0, x1):
-    print('do div')
     x1 = as_array(x1)
     return Div()(x0, x1)
 
 
 def rdiv(x0, x1):
-    print('do rdiv')
     x1 = as_array(x1)
     return Div()(x1, x0)
 
@@ -332,24 +313,24 @@ class Power(Function):
 
 
 def power(x, c: int):
-    print('do power')
     return Power(c)(x)
 
 
 def as_array(x) -> np.ndarray:
-    print('do as_array')
+    if isinstance(x, np.ndarray):
+        return x
+
     if np.isscalar(x):
-        print('x is scalar')
         return np.array(x)
     
     if isinstance(x, Variable):
-        print('x is not scalar, x is', x)
         return as_array(x.data)
-    return x
+
+    message = f"{type(x)} is not supported"
+    raise TypeError(message)
 
 
 def as_variable(obj) -> Variable:
-    print('do as_variable')
     if isinstance(obj, Variable):
         return obj
     return Variable(obj)
