@@ -32,7 +32,7 @@ class Layer:
 
     def cleargrads(self):
         for param in self.params():
-            param.cleargrads()
+            param.cleargrad()
 
 
 class Linear(Layer):

@@ -56,7 +56,9 @@ for i in range(iters):
 
     for l in [l1, l2]:
         for p in l.params():
+            print('p:', p)
+            print('p.grad.data:', p.grad.data, p.grad.data.shape, type(p.grad.data))
             p.data -= lr * p.grad.data
 
-    if i % 1000 == 0:
-        print(loss)
+        if i % 1000 == 0:
+            print(loss)

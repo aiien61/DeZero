@@ -219,7 +219,7 @@ def mean_squared_error_simple(x0, x1):
 class Linear(Function):
     def forward(self, x, W, b):
         y = x.dot(W)
-        if b is not None:
+        if b:
             y += b
         return y
     
