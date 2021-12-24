@@ -11,7 +11,7 @@ class Layer:
         self._params = set()
 
     def __setattr__(self, name, value):
-        if isinstance(value, Parameter):
+        if isinstance(value, (Parameter, Layer)):
             self._params.add(name)
         super().__setattr__(name, value)
 
@@ -28,7 +28,11 @@ class Layer:
 
     def params(self):
         for name in self._params:
-            yield self.__dict__[name]
+            obj = self.__dict__[name]
+            if isinstance(obj, Layer):
+                yield from obj.params()
+            else:
+                yield obj
 
     def cleargrads(self):
         for param in self.params():
@@ -36,11 +40,12 @@ class Layer:
 
 
 class Linear(Layer):
-    def __init__(self, out_size, nobias=False, dtype=np.float32, in_size=None):
+    def __init__(self, out_size, nobias=False, dtype=np.float64, in_size=None):
         super().__init__()
         self.in_size = in_size
         self.out_size = out_size
         self.dtype = dtype
+
         self.W = Parameter(None, name="W")
         if self.in_size is not None:
             self._init_W()
@@ -48,7 +53,7 @@ class Linear(Layer):
         if nobias:
             self.b = None
         else:
-            self.b = Parameter(np.zeros(0, dtype=dtype), name='b')
+            self.b = Parameter(np.zeros(out_size, dtype=dtype), name='b')
 
     def _init_W(self):
         I, O = self.in_size, self.out_size
