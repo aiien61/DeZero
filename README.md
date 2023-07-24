@@ -1,2 +1,2 @@
 # DeZero
-Making a deeplearning python library based on DeZero and Chainer packages (in progress)
+Implementing a TensorFlow-like and PyTorch-like deeplearning library (in progress).
