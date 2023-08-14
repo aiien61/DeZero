@@ -1,2 +1,2 @@
 # DeZero
-Implementing a TensorFlow-like and PyTorch-like deeplearning library (in progress).
+Implementing a TensorFlow-like deep learning library (in progress).
