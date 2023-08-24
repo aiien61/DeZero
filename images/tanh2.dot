@@ -1,0 +1,53 @@
+digraph g {
+140240542851520 [label="gx2", color=orange, style=filled]
+140240542851424 [label="Mul", color=lightblue, style=filled, shape=box]
+140240542814064 -> 140240542851424
+140240542851328 -> 140240542851424
+140240542851424 -> 140240542851520
+140240542814064 [label="", color=orange, style=filled]
+140240542851328 [label="", color=orange, style=filled]
+140240542851136 [label="Sub", color=lightblue, style=filled, shape=box]
+140240542851232 -> 140240542851136
+140240542814160 -> 140240542851136
+140240542851136 -> 140240542851328
+140240542851232 [label="", color=orange, style=filled]
+140240542814160 [label="", color=orange, style=filled]
+140240542813920 [label="Mul", color=lightblue, style=filled, shape=box]
+140240495429856 -> 140240542813920
+140240495429856 -> 140240542813920
+140240542813920 -> 140240542814160
+140240495429856 [label="y", color=orange, style=filled]
+140240495429856 [label="y", color=orange, style=filled]
+140240495428368 [label="Tanh", color=lightblue, style=filled, shape=box]
+140240489313712 -> 140240495428368
+140240495428368 -> 140240495429856
+140240489313712 [label="x", color=orange, style=filled]
+140240542813152 [label="Add", color=lightblue, style=filled, shape=box]
+140240542810752 -> 140240542813152
+140240542813824 -> 140240542813152
+140240542813152 -> 140240542814064
+140240542810752 [label="", color=orange, style=filled]
+140240542813824 [label="", color=orange, style=filled]
+140240542811232 [label="Mul", color=lightblue, style=filled, shape=box]
+140240495429856 -> 140240542811232
+140240542810512 -> 140240542811232
+140240542811232 -> 140240542813824
+140240495429856 [label="y", color=orange, style=filled]
+140240542810512 [label="", color=orange, style=filled]
+140240542810704 [label="Neg", color=lightblue, style=filled, shape=box]
+140240542764912 -> 140240542810704
+140240542810704 -> 140240542810512
+140240542764912 [label="", color=orange, style=filled]
+140240556074944 [label="Mul", color=lightblue, style=filled, shape=box]
+140240556013216 -> 140240556074944
+140240556073792 -> 140240556074944
+140240556074944 -> 140240542764912
+140240556013216 [label="", color=orange, style=filled]
+140240556073792 [label="", color=orange, style=filled]
+140240542810896 [label="Mul", color=lightblue, style=filled, shape=box]
+140240495429856 -> 140240542810896
+140240542810512 -> 140240542810896
+140240542810896 -> 140240542810752
+140240495429856 [label="y", color=orange, style=filled]
+140240542810512 [label="", color=orange, style=filled]
+}
