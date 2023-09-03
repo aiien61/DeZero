@@ -71,3 +71,7 @@ def plot_dot_graph(output, verbose=True, to_file='graph.png'):
     file_path = os.path.join(os.path.dirname(dot_path), to_file)
     cmd = f"dot {dot_path} -T {extension} -o {file_path}"
     subprocess.run(cmd, shell=True)
+
+
+def reshape_sum_backward(x, shape, axis, keepdims):
+    pass
