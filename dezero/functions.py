@@ -31,8 +31,10 @@ class Cos(Function):
         gx = gy * (-sin(x))
         return gx
 
+
 def cos(x):
     return Cos()(x)
+
 
 class Tanh(Function):
     def forward(self, x):
@@ -54,7 +56,7 @@ class Reshape(Function):
 
     def forward(self, x):
         self.x_shape = x.shape
-        y = x.reshape(self.shape)  # x inherit ndarray so reshape() is allowed to use
+        y = x.reshape(self.shape)  # x is the instance of ndarray
         return y
     
     def backward(self, gy):
@@ -115,7 +117,7 @@ class BroadcastTo(Function):
 def broadcast_to(x, shape):
     if x.shape == shape:
         return as_variable(x)
-    return BroadcastTo()(x)
+    return BroadcastTo(shape)(x)
 
 
 class SumTo(Function):
@@ -130,7 +132,29 @@ class SumTo(Function):
         gx = broadcast_to(gy, self.x_shape)
         return gx
 
+
 def sum_to(x, shape):
     if x.shape == shape:
         return as_variable(x)
     return SumTo()(x)
+
+
+class Tile(Function):
+    def __init__(self, reps):
+        self.reps = reps
+
+    def forward(self, x):
+        self.x_shape = x.shape
+        self.x_ndim = x.ndim
+        return np.tile(x, self.reps)
+    
+    def backward(self, gy):
+        if self.x_ndim == 1:
+            gx = gy[0, :self.shape[0]]
+        else:
+            gx = gy[:self.shape[0], :self.shape[1]]
+        return gx
+
+
+def tile(x, reps):
+    return Tile(reps)(x)
