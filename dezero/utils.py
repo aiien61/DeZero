@@ -73,9 +73,18 @@ def plot_dot_graph(output, verbose=True, to_file='graph.png'):
     subprocess.run(cmd, shell=True)
 
 
-# TODO: Function reshape_sum_backward() for backward() method of class Sum
-def reshape_sum_backward(x, shape, axis, keepdims):
-    pass
+def reshape_sum_backward(gy, shape, axis, keepdims):
+    pivot_shape: tuple = (shape[0], 1)
+
+    if not gy.shape:
+        gy = gy.reshape((1,))
+
+    if axis == 0:
+        return gy.tile(pivot_shape)
+    elif axis == 1:
+        return gy.reshape(pivot_shape)
+    else: # when axis is None
+        return gy
 
 
 # TODO: Function sum_to() adapted from NumPy
