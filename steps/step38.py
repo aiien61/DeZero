@@ -50,4 +50,4 @@ def test_transpose_property():
 
 
 if __name__ == "__main__":
-    test_transpose_property()
+    test_reshape()
