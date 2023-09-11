@@ -14,12 +14,12 @@ def addition():
     y = x + c
     print(y)
 
+
 def summation():
     x = Variable(np.array([[1, 2, 3], [4, 5, 6]]))
     c = Variable(np.array([[10, 20, 30], [40, 50, 60]]))
     t = x + c
     y = F.sum(t)
-    print(y)
 
     y.backward(retain_grad=True)
     print(y.grad)
@@ -29,4 +29,4 @@ def summation():
 
 
 if __name__ == '__main__':
-    addition()
+    summation()
