@@ -87,19 +87,23 @@ def reshape_sum_backward(gy, shape, axis, keepdims):
         return gy
 
 
-# TODO: Function sum_to() adapted from NumPy
-def sum_to(x, shape):
-    if len(shape) != x.shape:
-        raise ValueError(f"The dims of shape {shape} is not identical to {x}")
+def sum_to(x, shape):  
+    """Sum element along to output an array pf a given shape.
+
+    Args:
+        x (ndarray): Input array.
+        shape (tuple): Shape of the input array.
     
-    x_row, x_col = x.shape
+    Returns:
+        ndarray: Output array of the shape.
+    """
+    ndim = len(shape)
+    lead = x.ndim - ndim
+    lead_axis = tuple(range(lead))
 
-    # by row
-    if x_row == shape[0] and shape[1] == 1:
-        pass
+    axis = tuple([i + lead for i, sx in enumerate(shape) if sx == 1])
+    y = x.sum(lead_axis + axis, keepdims=True)
+    if lead > 0:
+        y = y.squeeze(lead_axis)
 
-    # by column
-    if x_col == shape[1] and shape[0] == 1:
-        pass
-
-    raise ValueError()
+    return y
