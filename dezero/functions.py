@@ -136,7 +136,7 @@ class SumTo(Function):
 def sum_to(x, shape):
     if x.shape == shape:
         return as_variable(x)
-    return SumTo()(x)
+    return SumTo(shape)(x)
 
 
 class Tile(Function):
