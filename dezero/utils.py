@@ -86,30 +86,8 @@ def reshape_sum_backward(gy, shape, axis, keepdims):
     else: # when axis is None
         return gy
 
-# # Chainer's version
-# def sum_to(x, shape):  
-#     """Sum element along to output an array pf a given shape.
-
-#     Args:
-#         x (ndarray): Input array.
-#         shape (tuple): Shape of the input array.
-    
-#     Returns:
-#         ndarray: Output array of the shape.
-#     """
-#     ndim = len(shape)
-#     lead = x.ndim - ndim
-#     lead_axis = tuple(range(lead))
-
-#     axis = tuple([i + lead for i, sx in enumerate(shape) if sx == 1])
-#     y = x.sum(lead_axis + axis, keepdims=True)
-#     if lead > 0:
-#         y = y.squeeze(lead_axis)
-
-#     return y
-
-# Refactored version
-def sum_to(x, shape):
+# Chainer's version
+def sum_to(x, shape):  
     """Sum element along to output an array pf a given shape.
 
     Args:
@@ -119,12 +97,34 @@ def sum_to(x, shape):
     Returns:
         ndarray: Output array of the shape.
     """
-    dims = {k: v for v, k in enumerate(shape)}
-    axis = dims.get(1) if dims.get(1) else 0
-    y = x.sum(axis=axis, keepdims=True)
-    while len(y.shape) != len(shape):
-        if 1 in y.shape:
-            y = y.squeeze()
-        else:
-            raise ValueError(f"{x} can't be summed up into the shape {shape}.")
+    ndim = len(shape)
+    lead = x.ndim - ndim
+    lead_axis = tuple(range(lead))
+
+    axis = tuple([i + lead for i, sx in enumerate(shape) if sx == 1])
+    y = x.sum(lead_axis + axis, keepdims=True)
+    if lead > 0:
+        y = y.squeeze(lead_axis)
+
     return y
+
+# # TODO: can't used in step42
+# def sum_to(x, shape):
+#     """Sum element along to output an array pf a given shape.
+
+#     Args:
+#         x (ndarray): Input array.
+#         shape (tuple): Shape of the input array.
+    
+#     Returns:
+#         ndarray: Output array of the shape.
+#     """
+#     dims = {k: v for v, k in enumerate(shape)}
+#     axis = dims.get(1) if dims.get(1) else 0
+#     y = x.sum(axis=axis, keepdims=True)
+#     while len(y.shape) != len(shape):
+#         if 1 in y.shape:
+#             y = y.squeeze()
+#         else:
+#             raise ValueError(f"{x} can't be summed up into the shape {shape}.")
+#     return y
