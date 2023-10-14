@@ -16,20 +16,13 @@ x, y = Variable(x), Variable(y)  # optional as x, y can be auto converted into V
 W = Variable(np.zeros((1, 1)))
 b = Variable(np.zeros(1))
 
-def predict(x):
-    y = F.matmul(x, W) + b
-    return y
-
-def mean_squared_error(x0, x1):
-    diff = x0 - x1
-    return F.sum(diff ** 2) / len(diff)
-
 learning_rate = 0.1
 iterations = 100
 
 for i in range(iterations):
-    y_pred = predict(x)
-    loss = mean_squared_error(y, y_pred)
+    y_pred = F.linear(x, W, b)
+    # y_pred = F.linear_simple(x, W, b)
+    loss = F.mean_squared_error(y, y_pred)
 
     W.cleargrad()
     b.cleargrad()
