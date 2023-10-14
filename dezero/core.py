@@ -28,7 +28,7 @@ class Variable:
                 raise TypeError(f"{type(data)} is not supported.")
 
         self.data = data
-        self.name = None
+        self.name = name
         self.grad = None
         self.creator = None
         self.generation = 0
@@ -129,7 +129,9 @@ class Function:
         ys = self.forward(*xs)
         if not isinstance(ys, tuple):
             ys = (ys,)
-        outputs = [Variable(as_array(y)) for y in ys]
+        
+        # outputs = [Variable(as_array(y)) for y in ys]
+        outputs = [as_variable(as_array(y)) for y in ys]
 
         if Config.enable_backprop:
             self.generation = max([x.generation for x in inputs])
