@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import dezero.functions as F
 from dezero import Variable
 
-# nonlinear transformation
+# example of nonlinear transformation
 
 # data
 np.random.seed(0)
@@ -17,12 +17,13 @@ x = np.random.rand(100, 1)
 y = np.sin(2 * np.pi * x) + np.random.rand(100, 1)
 
 # initial weights
-I, H, O = 1, 10, 1
-W1 = Variable(0.01 * np.random.randn(I, H))
-b1 = Variable(np.zeros(H))
-W2 = Variable(0.01 * np.random.randn(H, O))
-b2 = Variable(np.zeros(O))
+input_layer_dims, hidden_layer_dims, output_layer_dims = 1, 10, 1
+W1 = Variable(0.01 * np.random.randn(input_layer_dims, hidden_layer_dims))
+b1 = Variable(np.zeros(hidden_layer_dims))
+W2 = Variable(0.01 * np.random.randn(hidden_layer_dims, output_layer_dims))
+b2 = Variable(np.zeros(output_layer_dims))
 
+# TODO: change to sigmoid()
 # Inference
 def predict(x):
     y = F.linear(x, W1, b1)
