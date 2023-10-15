@@ -3,6 +3,9 @@ if '__file__' in globals():
     import sys
     sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
+import weakref
+import numpy as np
+import dezero.functions as F
 from dezero.core import Parameter
 
 
@@ -14,3 +17,78 @@ class Layer:
         if isinstance(value, Parameter):
             self._params.add(name)
         super().__setattr__(name, value)
+
+    def __call__(self, *inputs):
+        outputs = self.forward(*inputs)
+        if not isinstance(outputs, tuple):
+            outputs = (outputs,)
+        
+        self.inputs = [weakref.ref(x) for x in inputs]
+        self.outputs = [weakref.ref(y) for y in outputs]
+        return outputs if len(outputs) > 1 else outputs[0]
+    
+    def forward(self, inputs):
+        raise NotImplementedError()
+    
+    def params(self):
+        for name in self._params:
+            yield self.__dict__[name]
+
+    def cleargrads(self):
+        for param in self.params():
+            param.cleargrad()
+
+
+# # in_size has to be specified manually
+# class Linear(Layer):
+#     def __init__(self, in_size, out_size, nobias=False, dtype=np.float32):
+#         super().__init__()
+
+#         I, O = in_size, out_size # I: input layer, O: output layer
+#         W_data = np.random.randn(I, O).astype(dtype) * np.sqrt(1 / I)
+#         self.W = Parameter(W_data, name='W')
+
+#         # nobias: whether to ignore b
+#         if nobias:
+#             self.b = None
+#         else:
+#             self.b = Parameter(np.zeros(O, dtype=dtype), name='b')
+        
+#     def forward(self, x):
+#         return F.linear(x, self.W, self.b)
+
+
+# better version: it's optional for users to specify in_size
+class Linear(Layer):
+    def __init__(self, out_size, nobias=False, dtype=np.float32, in_size=None):
+        super().__init__()
+        self.in_size = in_size
+        self.out_size = out_size
+        self.dtype = dtype
+
+        self.W = Parameter(None, name='W')
+
+        # if no in_size specified, postpone the setting procedure.
+        if self.in_size is not None:
+            self._init_W()
+
+        if nobias:
+            self.b = None
+        else:
+            self.b = Parameter(np.zeros(out_size, dtype), name='b')
+
+
+    def _init_W(self):
+        I, O = self.in_size, self.out_size
+        W_data = np.random.randn(I, O).astype(self.dtype) * np.sqrt(1 / I)
+        self.W.data = W_data
+
+
+    def forward(self, x):
+        # Conduct weights initialisation at the same time as data delivery
+        if self.W.data is None:
+            self.in_size = x.shape[1]
+            self._init_W()
+        
+        y = F.linear(x, self.W, self.b)
+        return y
