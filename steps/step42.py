@@ -7,6 +7,7 @@ import unittest
 import numpy as np
 import dezero.functions as F
 from dezero import Variable
+from dezero.utils import plot_dot_graph
 
 np.random.seed(0)
 x = np.random.rand(100, 1)
@@ -32,3 +33,12 @@ for i in range(iterations):
     b.data -= learning_rate * b.grad.data
 
     print(W, b, loss)
+
+x.name = 'x'
+y.name = 'y'
+W.name = 'W'
+b.name = 'b'
+y_pred.name = 'y_pred'
+
+plot_dot_graph(y_pred, verbose=False, to_file="linear.png")
+# plot_dot_graph(y_pred, verbose=False, to_file="linear_simple.png")
