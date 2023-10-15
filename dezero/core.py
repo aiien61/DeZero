@@ -147,6 +147,10 @@ class Function:
 
     def backward(self, gys):
         raise NotImplementedError()
+    
+
+class Parameter(Variable):
+    pass
 
 
 def as_array(x):
