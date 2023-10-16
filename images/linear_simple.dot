@@ -1,0 +1,15 @@
+digraph g {
+4560771920 [label="y_pred", color=orange, style=filled]
+4567035728 [label="Add", color=lightblue, style=filled, shape=box]
+4537968272 -> 4567035728
+4535899664 -> 4567035728
+4567035728 -> 4560771920
+4537968272 [label="", color=orange, style=filled]
+4535899664 [label="b", color=orange, style=filled]
+4545829584 [label="MatMul", color=lightblue, style=filled, shape=box]
+4546965136 -> 4545829584
+4537411984 -> 4545829584
+4545829584 -> 4537968272
+4546965136 [label="x", color=orange, style=filled]
+4537411984 [label="W", color=orange, style=filled]
+}

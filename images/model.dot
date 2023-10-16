@@ -1,0 +1,39 @@
+digraph g {
+4382873680 [label="(5, 10) float64", color=orange, style=filled]
+4382490320 [label="Linear", color=lightblue, style=filled, shape=box]
+4373336720 -> 4382490320
+4382134672 -> 4382490320
+4326601616 -> 4382490320
+4382490320 -> 4382873680
+4373336720 [label="(5, 100) float64", color=orange, style=filled]
+4382134672 [label="W: (100, 10) float32", color=orange, style=filled]
+4326601616 [label="b: (10,) float32", color=orange, style=filled]
+4377882896 [label="Div", color=lightblue, style=filled, shape=box]
+4381454928 -> 4377882896
+4382534544 -> 4377882896
+4377882896 -> 4373336720
+4381454928 [label="() int64", color=orange, style=filled]
+4382534544 [label="(5, 100) float64", color=orange, style=filled]
+4379949200 [label="Add", color=lightblue, style=filled, shape=box]
+4382443728 -> 4379949200
+4382451600 -> 4379949200
+4379949200 -> 4382534544
+4382443728 [label="(5, 100) float64", color=orange, style=filled]
+4382451600 [label="() int64", color=orange, style=filled]
+4381603856 [label="Exp", color=lightblue, style=filled, shape=box]
+4369378640 -> 4381603856
+4381603856 -> 4382443728
+4369378640 [label="(5, 100) float64", color=orange, style=filled]
+4326189712 [label="Neg", color=lightblue, style=filled, shape=box]
+4381680272 -> 4326189712
+4326189712 -> 4369378640
+4381680272 [label="(5, 100) float64", color=orange, style=filled]
+4375994704 [label="Linear", color=lightblue, style=filled, shape=box]
+4379949840 -> 4375994704
+4324677520 -> 4375994704
+4324677712 -> 4375994704
+4375994704 -> 4381680272
+4379949840 [label="x: (5, 10) float64", color=orange, style=filled]
+4324677520 [label="W: (10, 100) float32", color=orange, style=filled]
+4324677712 [label="b: (100,) float32", color=orange, style=filled]
+}
