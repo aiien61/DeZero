@@ -3,12 +3,11 @@ if '__file__' in globals():
     import sys
     sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-import unittest
 import numpy as np
 import matplotlib.pyplot as plt
 import dezero.functions as F
 import dezero.layers as L
-from dezero import Variable, Parameter, Model
+from dezero import Variable, Model
 
 # generate dataset
 np.random.seed(0)
