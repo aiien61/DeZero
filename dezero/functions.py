@@ -68,7 +68,7 @@ def exp(x):
 
 
 # ---------------------------------------------------------
-# tensor operations: reshape / transpose
+# tensor operations: reshape / transpose / get_item
 # ---------------------------------------------------------
 class Reshape(Function):
     def __init__(self, shape):
@@ -100,6 +100,37 @@ class Transpose(Function):
 
 def transpose(x):
     return Transpose()(x)
+
+
+class GetItem(Function):
+    def __init__(self, slices):
+        self.slices = slices
+    
+    def forward(self, x):
+        return x[self.slices]
+    
+    def backward(self, gy):
+        x, = self.inputs
+        f = GetItemGrad(self.slices, x.shape)
+        return f(gy)
+    
+
+class GetItemGrad(Function):
+    def __init__(self, slices, in_shape):
+        self.slices = slices
+        self.in_shape = in_shape
+    
+    def forward(self, gy):
+        gx = np.zeros(self.in_shape)
+        np.add.at(gx, self.slices, gy)
+        return gx
+    
+    def backward(self, ggx):
+        return get_item(ggx, self.slices)
+
+
+def get_item(x, slices):
+    return GetItem(slices)(x)
 
 
 # ---------------------------------------------------------
@@ -257,9 +288,16 @@ def linear_simple(x, W, b=None):
     return y
 
 # ---------------------------------------------------------
-# activation functions: sigmoid
+# activation functions: sigmoid / softmax
 # ---------------------------------------------------------
 def sigmoid_simple(x):
     x = as_variable(x)
     y = 1 / (1 + exp(-x))
     return y
+
+
+def softmax_simple(x, axis=1):
+    x = as_variable(x)
+    y = exp(x)
+    sum_y = sum(y, axis=axis, keepdims=True)
+    return y / sum_y
