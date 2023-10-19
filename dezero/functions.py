@@ -67,6 +67,19 @@ def exp(x):
     return Exp()(x)
 
 
+class Log(Function):
+    def forward(self, x):
+        return np.log(x)
+    
+    def backward(self, gy):
+        x, = self.inputs
+        gx = gy / x
+        return gx
+
+
+def log(x):
+    return Log()(x)
+
 # ---------------------------------------------------------
 # tensor operations: reshape / transpose / get_item
 # ---------------------------------------------------------
@@ -231,7 +244,7 @@ def matmul(x, W):
 
 
 # ---------------------------------------------------------
-# loss functions: mse
+# loss functions: mse / softmax_cross_entropy
 # ---------------------------------------------------------
 class MeanSquaredError(Function):
     def forward(self, x0, x1):
@@ -254,6 +267,21 @@ def mean_squared_error_simple(x0, x1):
     diff = x0 - x1
     return sum(diff ** 2) / len(diff)
 
+
+def softmax_cross_entropy_simple(x, t):
+    x, t = as_variable(x), as_variable(t)
+    N = x.shape[0]
+
+    # TODO: employ better version of softmax
+    p = softmax_simple(x)
+
+    # set p as an extremely small number e.g. 1e-15 in order to avoid log(0)
+    p = clip(p, 1e-15, 1.0)
+    
+    log_p = log(p)
+    tlog_p = log_p[np.arange(N), t.data]
+    y = -1 * sum(tlog_p) / N
+    return y
 
 # ---------------------------------------------------------
 # transformation functions: linear
@@ -296,8 +324,30 @@ def sigmoid_simple(x):
     return y
 
 
+# TODO: refactor to class
 def softmax_simple(x, axis=1):
     x = as_variable(x)
     y = exp(x)
     sum_y = sum(y, axis=axis, keepdims=True)
     return y / sum_y
+
+# ---------------------------------------------------------
+# utility functions: clip
+# ---------------------------------------------------------
+class Clip(Function):
+    def __init__(self, x_min, x_max):
+        self.x_min = x_min
+        self.x_max = x_max
+
+    def forward(self, x):
+        return np.clip(x, self.x_min, self.x_max)
+    
+    def backward(self, gy):
+        x, = self.inputs
+        mask = (x.data >= self.x_min) * (x.data <= self.x_max)
+        gx = gy * mask
+        return gx
+
+
+def clip(x, x_min, x_max):
+    return Clip(x_min, x_max)(x)
